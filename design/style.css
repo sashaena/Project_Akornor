@@ -1,0 +1,53 @@
+body {
+
+}
+
+.form-container{
+  
+}
+
+.login-form {
+  font: 16px/2em Lato, serif;
+  max-width: 400px;
+  margin: 100px auto;
+}
+
+.text-title{
+  font-size: 60px;
+  margin-top: 70px;
+  font-style: cursive;
+}
+
+form[role=login] {
+  color: #5d5d5d;
+  background: #f2f2f2;
+  padding: 26px;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
+form[role=login] img {
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 35px;
+}
+
+form[role=login] input,
+form[role=login] button {
+  font-size: 18px;
+  margin: 16px 0;
+}
+
+form[role=login] > div {
+  text-align: center;
+}
+  
+.form-links {
+  text-align: center;
+  margin-top: 1em;
+  margin-bottom: 50px;
+}
+
+.form-links a {
+  color: #fff;
+}
