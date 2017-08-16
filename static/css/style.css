@@ -60,23 +60,28 @@ form[role=login] > div {
 /*attendance.html*/
 
 .btn-attendance{
-  text-align: center;
+/*  text-align: center;
   background-color:#f4511e; 
   text-decoration: none;
   display: inline-block;
-  font-size: 20px;
-  margin-top: 120%;
-  margin-bottom: 170%;
-  height: 60px;
-  width: 180px;
-  border-radius: 8px;
-  transition: all 0.5s;
+  text-align: center;
+  resize: vertical;*/
+  max-width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 500px;
+  margin-bottom: 100px;
+  height: 100px;
+  width: 280px;
+  font-size: 30px;
+/*  border-radius: 8px;
+  transition: all 0.2s;
   cursor: pointer;
-  color: #FFFFFF;
+  color: #FFFFFF;*/
   /*padding: 10px 24px*/
-  /*position: static;*/
+  /*position: static;*/*/
 
-}
+}/*
 .btn-attendance span {
   cursor: pointer;
   display: inline-block;
@@ -100,4 +105,33 @@ form[role=login] > div {
 .btn-attendance:hover span:after {
   opacity: 1;
   right: 0;
+}
+*/
+/*learnfaces*/
+.logo{
+  width: 80px;
+  height: 70px;
+}
+
+.body-info{
+  border-style: solid;
+  border-width: medium;
+  border-color: black;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 90%;
+  padding: 10px;
+}
+.body-info-right{
+  border-style: solid;
+  border-width: 2px;
+  max-width: 80%
+  border-color: red;
+}
+
+.body-info-left{
+  border-style: solid;
+  border-width: 2px;
+  max-width: 80%
+  border-color: blue;
 }

@@ -1,15 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+  {% block head %}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Login - Project Akornor</title>
+    <title>{% block title %}{% endblock %} - Project Akornor</title>
 
     <!-- Bootstrap -->
-    <link href="bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">
+
+    <style type="text/css">
+      video, canvas{
+        margin-left: 200px;
+        margin-top: 100px;
+        border-width: 1px;
+        border-color: #333;
+      }
+    </style>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -17,19 +27,15 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-  </head>
-  <body>
-    <div class="col-sm-6 col-xs-6">
-      <img src="/bckgrndLearn.jpeg">
-        <button class="btn btn-default btn-attendance pull-right">Learn Faces </button>
-    </div>
-    <div class="col-sm-6 col-xs-6">
-       <button class="btn btn-default btn-attendance pull-left">Recognize Faces</button>
-    </div>
-   
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  {% endblock %}
+    </head>
+    <body>
+        {% block content%}{% endblock %}
+    </body>
+
+       <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="bootstrap.min.js"></script>
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/rec.js')}}"></script>
   </body>
-</html>

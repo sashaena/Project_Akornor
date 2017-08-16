@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Recognize{% endblock %}
+{% block content %}
+  {% include 'nav.html' %}
+    <div class="container">
+
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+      <h1>Akonor</h1>
+      <!-- webcam feed display -->
+      <!-- <div class="cam-display thumbnail"></div> -->
+      <video id="video" width="320" height="240"></video>
+      <canvas id="canvas" width="320" height="240"></canvas>
+      <button class="btn btn-default"><span class="glyphicon glyphicon-record red"></span> Recording</button>
+
+      
+      <!-- results -->
+      <div class="well console">
+        <p>Failed to recognize face!</p>
+      </div>
+      <div class="table-responsive hidden">      
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <td></td>           
+              <td>Id Number</td>
+              <td>Full Name</td>
+              <td>Year Group</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="glyphicon glyphicon-ok"></span></td>   
+              <td>23456</td>
+              <td>Sasha Ofori</td>
+              <td>2020</td>
+            </tr>
+
+            <tr>
+              <td></td> 
+              <td>23456</td>
+              <td>Jesse Ayenor</td>
+              <td>2020</td>
+            </tr>
+
+            <tr>
+              <td><span class="glyphicon glyphicon-ok"></span></td>   
+              <td>23456</td>
+              <td>Mullah Omar</td>
+              <td>2020</td>
+            </tr>
+
+            <tr>
+              <td><span class="glyphicon glyphicon-ok"></span></td>   
+              <td>23456</td>
+              <td>James Patterson</td>
+              <td>2020</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-3"></div>
+
+    </div>
+{% endblock %}  

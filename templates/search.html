@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+{% block content %}
+
+  {% include 'nav.html' %}
+    <div class="container">
+
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+      <h1>Akonor</h1>
+
+    <form method="GET" action="/search"> 
+      <div class="input-group">
+        <input class="form-control" type="text" name="query" placeholder="search for student...">
+      </div>
+      <div class="input-group-btn">
+        <button class="btn btn-default" type="submit">
+          <span class="glyphicon glyphicon-search" sty></span>
+        </button>
+      </div>
+      </form>
+
+          <h2><small>Search Results...</small></h2>
+        <!-- Create just one column of table from which you can create several rows -->
+        <div class="table-responsive">      
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <td></td>           
+                <td>Id Number</td>
+                <td>First name</td>
+                <td>Last name</td>
+                <td>Year Group</td>
+              </tr>
+            </thead>
+            <tbody>
+            <!-- loop through the list of students and print them acording to the table in different rows -->
+            {% for s in students %}
+              <tr>
+                <td><span class="glyphicon glyphicon-ok"></span></td>
+                <!-- Pass the various attributes of the database but given just one href ie. id -->
+                <td><a href="{{url_for('learn', id=s['id'])}}"> {{s['student_id']}}</a></td>
+
+                <td><a href="{{url_for('learn',id=s['id'])}}">{{s['firstname']}}</a></td>
+
+                <td><a href="{{url_for('learn',id=s['id'])}}">{{s['lastname']}}</a></td>
+
+                <td><a href="{{url_for('learn',id=s['id'])}}">{{s['year_group']}}</a></td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+      </div>
+    <div class="col-md-3"></div>
+    </div>
+{% endblock %}
