@@ -6,7 +6,8 @@ from werkzeug.utils import secure_filename
 from os.path import join, dirname, realpath
 from sqlalchemy.exc import IntegrityError
 from flask_sockets import Sockets
-import base64
+import base64, json
+from flask import send_from_directory
 
 # import flask_whooshalchemy as wa
 # import unicodedata
@@ -131,7 +132,7 @@ def learn():
 		if request.method == 'POST':
 			file = request.files['file']
 			if file and allowed_file(file.filename):
-				filename = secure_filename(file.filename)
+				filename = secure_filename(str(student.student_id) + '.jpg')
 				file.save(os.path.join(app.config['UPLOAD_FOLDER'],filename))
 				# print('Requests!!!! : ', request.args['firstname'], request.args['lastname'], request.args['year_group'], request.args['student_id'])
 				# firstname = request.args['firstname']
@@ -157,6 +158,10 @@ def webSocket(webS):
 		message = webS.receive()
 		# raw = message.decode('utf8')
 
+		if message == None:
+			none_error = {"error": "Message sent is null"}
+			webS.send(json.dumps(none_error))
+
 		# this is a check mechanism to make sure that message received is an image file
 		head = "data:image/jpeg;base64,"
 		# if the head which contains a what makes the message an image is an image
@@ -166,9 +171,20 @@ def webSocket(webS):
 			# decode the image and extract the rest of the message out
 			imgdata = base64.b64decode(message[len(head):])
 			filename = secure_filename("temp.jpg")
-			with open(os.path.join(app.config['UPLOAD_FOLDER'], filename), 'wb') as imgFile:
-				imgFile.write(imgdata)
-				check_face_encodings(filename)
+			try:
+				with open(os.path.join(app.config['UPLOAD_FOLDER'], filename), 'wb') as imgFile:
+					imgFile.write(imgdata)
+					res = check_face_encodings(filename)
+					if res:
+						res_dict = {"name":res.firstname + " " + res.lastname, "id":res.student_id}
+						webS.send(json.dumps(res_dict))
+					else:
+						error_dict = {"error":"Could not recognize face"}
+						webS.send(json.dumps(error_dict))
+			except OSError:
+				os_error = {"error":"Hold on for a bit"}
+				webS.send(json.dumps(os_error))
+
 		else:
 			print("0")
 
@@ -179,6 +195,16 @@ def rec():
 	if 'key' in session:
 		return render_template('rec.html')
 
+@app.route('/upload/<filename>')
+def get_uploaded_file(filename):
+	return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@app.route('/account')
+def account():
+	if 'key' in session:
+		return render_template('account.html')
+	return redirect(url_for('index'))
+
 def login(email, password):
 # give some mock credentials so as to get feedback
 	if email == 'akornor.canteen@ashesi.edu.gh':
@@ -188,14 +214,18 @@ def login(email, password):
 
 def generate_face_encodings(file, id, firstname, lastname, year_group, student_id,):
 	try:
-		filename = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+		# Filename stores the complete path of where the image file is plus the name of the file
+		# There is no need to get into the database to get the student by the id because this has
+		# already been passed in the generate_face_encoding
+		filename = os.path.join(app.config['UPLOAD_FOLDER'], str(student_id) + ".jpg")
+		# student = Student.query.filter_by(id=id).first()
 		image_file = fr.load_image_file(filename)
 		f_encodings = fr.face_encodings(image_file)[0]
 		print ("face encodings = " , f_encodings)
 		encodings_string = "|".join(map(str, f_encodings))
 		print("encoding string =", encodings_string)
 
-		student_encodings = Face_recognition_database(firstname, lastname, student_id, year_group, encodings_string)
+		student_encodings = Face_recognition_database(student_id, firstname, lastname, year_group, encodings_string)
 		db.session.add(student_encodings)
 		db.session.commit()
 
@@ -211,20 +241,43 @@ def check_face_encodings(filename):
 	encoding_list = fr.face_encodings(image)
 	if len(encoding_list) > 0:
 		u_encoding = encoding_list[0]
-		print("Generated encoding!")
+		print("Generated encoding! " + str(len(encoding_list)))
 		# get into the database and get all its records
 		all_records = Face_recognition_database.query.all()
+		# for each record in the records from the database
 		for record in all_records:
+			#create an empty string called encoding
 			encodings = []
 			splitted = record.face_encodings.split("|")
 			encodings.append([float (ir) for ir in splitted])
 			match = fr.compare_faces(encodings, u_encoding, 0.5)
-			student_id = record.student_id
-			firstname , lastname = record.firstname, record.lastname 
-			print(match)
-			print ('Student with an ID number of ', student_id, 'and name', firstname , lastname, 'has been matched correctly')
-	else:
-		print("Could not generate encoding :(;")
+			print(match, "matched")
+
+			if match[0] == True:
+				return record
+		return None
+				# tru = records.face_encodings
+			# else:
+			# 	return None
+				
+
+
+			# try:
+			# 	position = match.index(True)
+			# 	name = records[position][1]
+			# 	print(name, "name")
+			# except:
+			# 	name = 'Not sure'
+
+			# faces_names.append(name)
+
+
+			# if u_encoding == record.face_encodings:
+			# 	student_id = record.student_id
+			# 	firstname , lastname = record.firstname, record.lastname 
+			# 	print ('Student with an ID number of ', student_id, 'and name', firstname , lastname, 'has been matched correctly')
+	
+		# print("Could not generate encoding :(;")
 
 
 if __name__ == "__main__":
